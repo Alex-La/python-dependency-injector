@@ -1,6 +1,7 @@
 """Configuration.from_pydantic() tests."""
 
 import pydantic
+import pydantic_settings
 from dependency_injector import providers
 from pytest import fixture, mark, raises
 
@@ -13,7 +14,7 @@ class Section12(pydantic.BaseModel):
     value2 = 2
 
 
-class Settings1(pydantic.BaseSettings):
+class Settings1(pydantic_settings.BaseSettings):
     section1 = Section11()
     section2 = Section12()
 
@@ -27,7 +28,7 @@ class Section3(pydantic.BaseModel):
     value3 = 3
 
 
-class Settings2(pydantic.BaseSettings):
+class Settings2(pydantic_settings.BaseSettings):
     section1 = Section21()
     section3 = Section3()
 
@@ -86,10 +87,10 @@ def test_copy(config, pydantic_settings_1, pydantic_settings_2):
 
 
 def test_set_pydantic_settings(config):
-    class Settings3(pydantic.BaseSettings):
+    class Settings3(pydantic_settings.BaseSettings):
         ...
 
-    class Settings4(pydantic.BaseSettings):
+    class Settings4(pydantic_settings.BaseSettings):
         ...
 
     settings_3 = Settings3()
@@ -100,27 +101,27 @@ def test_set_pydantic_settings(config):
 
 
 def test_file_does_not_exist(config):
-    config.set_pydantic_settings([pydantic.BaseSettings()])
+    config.set_pydantic_settings([pydantic_settings.BaseSettings()])
     config.load()
     assert config() == {}
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_file_does_not_exist_strict_mode(config):
-    config.set_pydantic_settings([pydantic.BaseSettings()])
+    config.set_pydantic_settings([pydantic_settings.BaseSettings()])
     with raises(ValueError):
         config.load()
     assert config() == {}
 
 
 def test_required_file_does_not_exist(config):
-    config.set_pydantic_settings([pydantic.BaseSettings()])
+    config.set_pydantic_settings([pydantic_settings.BaseSettings()])
     with raises(ValueError):
         config.load(required=True)
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_not_required_file_does_not_exist_strict_mode(config):
-    config.set_pydantic_settings([pydantic.BaseSettings()])
+    config.set_pydantic_settings([pydantic_settings.BaseSettings()])
     config.load(required=False)
     assert config() == {}

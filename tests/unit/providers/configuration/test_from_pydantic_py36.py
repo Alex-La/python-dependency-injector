@@ -1,6 +1,7 @@
 """Configuration.from_pydantic() tests."""
 
 import pydantic
+import pydantic_settings
 from dependency_injector import providers, errors
 from pytest import fixture, mark, raises
 
@@ -13,7 +14,7 @@ class Section12(pydantic.BaseModel):
     value2 = 2
 
 
-class Settings1(pydantic.BaseSettings):
+class Settings1(pydantic_settings.BaseSettings):
     section1 = Section11()
     section2 = Section12()
 
@@ -27,7 +28,7 @@ class Section3(pydantic.BaseModel):
     value3 = 3
 
 
-class Settings2(pydantic.BaseSettings):
+class Settings2(pydantic_settings.BaseSettings):
     section1 = Section21()
     section3 = Section3()
 
@@ -82,46 +83,46 @@ def test_merge(config):
 
 
 def test_empty_settings(config):
-    config.from_pydantic(pydantic.BaseSettings())
+    config.from_pydantic(pydantic_settings.BaseSettings())
     assert config() == {}
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_empty_settings_strict_mode(config):
     with raises(ValueError):
-        config.from_pydantic(pydantic.BaseSettings())
+        config.from_pydantic(pydantic_settings.BaseSettings())
 
 
 def test_option_empty_settings(config):
-    config.option.from_pydantic(pydantic.BaseSettings())
+    config.option.from_pydantic(pydantic_settings.BaseSettings())
     assert config.option() == {}
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_option_empty_settings_strict_mode(config):
     with raises(ValueError):
-        config.option.from_pydantic(pydantic.BaseSettings())
+        config.option.from_pydantic(pydantic_settings.BaseSettings())
 
 
 def test_required_empty_settings(config):
     with raises(ValueError):
-        config.from_pydantic(pydantic.BaseSettings(), required=True)
+        config.from_pydantic(pydantic_settings.BaseSettings(), required=True)
 
 
 def test_required_option_empty_settings(config):
     with raises(ValueError):
-        config.option.from_pydantic(pydantic.BaseSettings(), required=True)
+        config.option.from_pydantic(pydantic_settings.BaseSettings(), required=True)
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_not_required_empty_settings_strict_mode(config):
-    config.from_pydantic(pydantic.BaseSettings(), required=False)
+    config.from_pydantic(pydantic_settings.BaseSettings(), required=False)
     assert config() == {}
 
 
 @mark.parametrize("config_type", ["strict"])
 def test_not_required_option_empty_settings_strict_mode(config):
-    config.option.from_pydantic(pydantic.BaseSettings(), required=False)
+    config.option.from_pydantic(pydantic_settings.BaseSettings(), required=False)
     assert config.option() == {}
     assert config() == {"option": {}}
 
