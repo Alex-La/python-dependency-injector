@@ -2361,6 +2361,12 @@ cdef class Configuration(Object):
                 "instead \"{0}\" use \"{0}()\"".format(settings.__name__)
             )
 
+        if not isinstance(settings, pydantic_settings.BaseSettings):
+            raise Error(
+                "Unable to recognize settings instance, expect \"pydantic_settings.BaseSettings\", "
+                "got {0} instead".format(settings)
+            )
+
         self.from_dict(settings.dict(**kwargs), required=required)
 
     def from_dict(self, options, required=UNDEFINED):
