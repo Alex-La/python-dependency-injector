@@ -32,7 +32,7 @@ cythonize:
 	mkdir -p reports/cython/
 	find src -name '*.html' -exec mv {}  reports/cython/  \;
 
-build: clean cythonize
+build:
 	# Compile C extensions
 	python setup.py build_ext --inplace
 
