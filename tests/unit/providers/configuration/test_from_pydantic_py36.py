@@ -131,7 +131,7 @@ def test_not_instance_of_settings(config):
     with raises(errors.Error) as error:
         config.from_pydantic({})
     assert error.value.args[0] == (
-        "Unable to recognize settings instance, expect \"pydantic.BaseSettings\", "
+        "Unable to recognize settings instance, expect \"pydantic_settings.BaseSettings\", "
         "got {0} instead".format({})
     )
 
@@ -140,7 +140,7 @@ def test_option_not_instance_of_settings(config):
     with raises(errors.Error) as error:
         config.option.from_pydantic({})
     assert error.value.args[0] == (
-        "Unable to recognize settings instance, expect \"pydantic.BaseSettings\", "
+        "Unable to recognize settings instance, expect \"pydantic_settings.BaseSettings\", "
         "got {0} instead".format({})
     )
 
